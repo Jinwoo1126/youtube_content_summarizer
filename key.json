@@ -1,0 +1,9 @@
+{
+    "youtube_api":{
+        "key" : "youtube api key"
+    },
+    "openai":{
+        "key" : "openai api key",
+        "organization_id" : "openai organization_id"
+    }
+}
