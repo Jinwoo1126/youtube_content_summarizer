@@ -2,6 +2,7 @@ import os
 import json
 from datetime import date, timedelta
 from pydub import AudioSegment
+import platform
 
 
 def get_config():
@@ -29,17 +30,18 @@ def dump_file(file):
 
 def remove_files(filename):
     try:
-        os.remove(f"Downloads\{filename}.mp4")
-        os.remove(f"Downloads\{filename}.mp3")
+        os.remove(os.path.join("Downloads", f"{filename}.mp4"))
+        os.remove(os.path.join("Downloads", f"{filename}.mp3"))
     except FileNotFoundError as e:
         print(e)
 
 
 def audio_segment(filename):
-    AudioSegment.converter = r'C:\Users\장진우\Documents\proj\youtube_crawler\ffmpeg\ffmpeg-2023-10-18-git-e7a6bba51a-full_build\bin\ffmpeg.exe'
-    AudioSegment.ffprobe = r'C:\Users\장진우\Documents\proj\youtube_crawler\ffmpeg\ffmpeg-2023-10-18-git-e7a6bba51a-full_build\bin\ffprobe.exe'
+    if platform.system() == 'Windows':
+        AudioSegment.converter = r'please enter ffmpeg.exe path'
+        AudioSegment.ffprobe = r'please enter ffprobe.exe path'
 
-    song = AudioSegment.from_mp3(f"Downloads\{filename}.mp3")
+    song = AudioSegment.from_mp3(os.path.join("Downloads", f"{filename}.mp3"))
 
     # PyDub handles time in milliseconds
     ten_minutes = 10 * 60 * 1000
@@ -47,7 +49,7 @@ def audio_segment(filename):
     converted_files = []
     for cnt, idx in enumerate(range(0, len(song), ten_minutes)):
         Video_10_minutes = song[idx:idx + ten_minutes]
-        converted_filename = f"Downloads\(converted)_{filename}_{cnt+1}.mp3"
+        converted_filename = os.path.join("Downloads", f"(converted)_{filename}_{cnt+1}.mp3")
         Video_10_minutes.export(converted_filename, format="mp3")
         converted_files.append(converted_filename)
 

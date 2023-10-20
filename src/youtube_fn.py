@@ -33,8 +33,8 @@ def file_downloads(url:str, filename:str):
 
 
 def extract_audio(filename:str):
-    video_filename = f"Downloads\{filename}.mp4"
-    audio_filename = f"Downloads\{filename}.mp3"
+    video_filename = os.path.join("Downloads", f"{filename}.mp4")
+    audio_filename = os.path.join("Downloads", f"{filename}.mp3")
     video = VideoFileClip(video_filename)
     video.audio.write_audiofile(audio_filename)
         
