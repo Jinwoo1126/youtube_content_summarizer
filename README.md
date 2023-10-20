@@ -8,7 +8,7 @@ This project is intended to easily summarize YouTube contents.
 
 **The overall process is as follows:**
 
-![Total Process](image.png)
+![Total Process](total_process.png)
 
 📮 Note
 
