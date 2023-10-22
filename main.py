@@ -3,12 +3,18 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from oauth2client.tools import argparser
 import openai
+import argparse
 
 from src.utils import get_config, dump_file, remove_files, audio_segment
 from src.youtube_fn import youtube_search, file_downloads, extract_audio
 
-
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Youtube Content Summarizer')
+    parser.add_argument('-q','--query', dest='query', help='Search Query', default='Google')
+    parser.add_argument('-m', '--max_results', dest='max_results',help='Max results', default=1)
+
+    args = parser.parse_args()
+
     keys = get_config()
 
     openai.organization = keys["openai"]["organization_id"]
@@ -19,7 +25,7 @@ if __name__ == "__main__":
     YOUTUBE_API_VERSION="v3"
     youtube = build(YOUTUBE_API_SERVICE_NAME,YOUTUBE_API_VERSION,developerKey=DEVELOPER_KEY)
 
-    search_response = youtube_search(youtube, q="이차전지", maxResults=1)
+    search_response = youtube_search(youtube, q=args.query, maxResults=args.max_results)
     
     os.makedirs(os.path.join(os.getcwd(), 'Downloads'), exist_ok=True)
 
