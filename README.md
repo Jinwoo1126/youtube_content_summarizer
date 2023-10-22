@@ -1,6 +1,6 @@
 # youtube_content_summarizer
 
-Author : Jinwoo Jang
+Author : Jinwoo Jang (wdfrty1234@gmail.com)
 
 ## 📔 Description
 
@@ -8,7 +8,7 @@ This project is intended to easily summarize YouTube contents.
 
 **The overall process is as follows:**
 
-![Total Process](image.png)
+![Total Process](total_process.png)
 
 📮 Note
 
@@ -48,7 +48,7 @@ pip install -r requirements.txt
 ## 🏃‍♂️ Run Script
 
 ```shell
-python main.py
+python main.py -q {search query} -m {num of results}
 ```
 
 
