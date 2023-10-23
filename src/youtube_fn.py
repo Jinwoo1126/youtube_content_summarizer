@@ -3,6 +3,7 @@ import gc
 from typing import Any
 from pytube import YouTube
 from moviepy.editor import *
+from youtube_transcript_api import YouTubeTranscriptApi
 
 from .utils import get_rfc_date
 
@@ -18,9 +19,19 @@ def youtube_search(youtube, q:str=None, maxResults:int=None) -> Any:
     return search_response
 
 
+def get_caption(url:str, filename:str):    
+    # assigning srt variable with the list 
+    # of dictionaries obtained by the get_transcript() function
+    srt = YouTubeTranscriptApi.get_transcript(filename, languages=['ko'])
+    
+    # return the result
+    return srt
+
+
 def file_downloads(url:str, filename:str):
     def download(link):
         youtubeObject = YouTube(link)
+        #youtubeObject = youtubeObject.streams.filter(only_audio=True).first()
         youtubeObject = youtubeObject.streams.get_highest_resolution()
         try:
             youtubeObject.download('Downloads', filename = f"{filename}.mp4")

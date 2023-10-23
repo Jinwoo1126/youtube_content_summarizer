@@ -6,7 +6,7 @@ import openai
 import argparse
 
 from src.utils import get_config, dump_file, remove_files, audio_segment
-from src.youtube_fn import youtube_search, file_downloads, extract_audio
+from src.youtube_fn import youtube_search, file_downloads, extract_audio, get_caption
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Youtube Content Summarizer')
@@ -32,6 +32,11 @@ if __name__ == "__main__":
     for item in search_response['items']:
         video_url = 'http://www.youtube.com/watch?v=' + item['id']['videoId']
         filename = item['id']['videoId']
+
+        srt = get_caption(video_url, filename)
+
+        ## print srt['text']
+        print("".join([x['text'] for x in srt]))
 
         file_downloads(video_url, filename)
         audio_filename = extract_audio(filename)
