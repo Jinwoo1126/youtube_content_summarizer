@@ -10,8 +10,9 @@ from src.youtube_fn import youtube_search, file_downloads, extract_audio, get_ca
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Youtube Content Summarizer')
-    parser.add_argument('-q','--query', dest='query', help='Search Query', default='Google')
-    parser.add_argument('-m', '--max_results', dest='max_results',help='Max results', default=1)
+    parser.add_argument('-q','--query', dest='query', help='Search Query', required=True)
+    parser.add_argument('-m', '--max_results', dest='max_results', help='Max results', default=1)
+    parser.add_argument('-c', '--caption', help='caption', action='store_true')
 
     args = parser.parse_args()
 
@@ -33,16 +34,16 @@ if __name__ == "__main__":
         video_url = 'http://www.youtube.com/watch?v=' + item['id']['videoId']
         filename = item['id']['videoId']
 
-        srt = get_caption(video_url, filename)
+        if args.caption:
+            srt = get_caption(video_url, filename)
+            converted_files = "".join([x['text'] for x in srt])
+            print(converted_files)
+        else:
+            file_downloads(video_url, filename)
+            audio_filename = extract_audio(filename)
 
-        ## print srt['text']
-        print("".join([x['text'] for x in srt]))
-
-        file_downloads(video_url, filename)
-        audio_filename = extract_audio(filename)
-
-        converted_files = audio_segment(filename)
-        remove_files(filename)
+            converted_files = audio_segment(filename)
+            remove_files(filename)
 
         item['summary'] = []
 
