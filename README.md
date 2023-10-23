@@ -1,6 +1,6 @@
 # youtube_content_summarizer
 
-Author : Jinwoo Jang
+Author : Jinwoo Jang (wdfrty1234@gmail.com)
 
 ## 📔 Description
 
@@ -48,7 +48,7 @@ pip install -r requirements.txt
 ## 🏃‍♂️ Run Script
 
 ```shell
-python main.py
+python main.py -q {search query} -m {num of results}
 ```
 
 

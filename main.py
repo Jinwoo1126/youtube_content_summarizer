@@ -3,12 +3,19 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from oauth2client.tools import argparser
 import openai
+import argparse
 
 from src.utils import get_config, dump_file, remove_files, audio_segment
-from src.youtube_fn import youtube_search, file_downloads, extract_audio
-
+from src.youtube_fn import youtube_search, file_downloads, extract_audio, get_caption
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Youtube Content Summarizer')
+    parser.add_argument('-q','--query', dest='query', help='Search Query', required=True)
+    parser.add_argument('-m', '--max_results', dest='max_results', help='Max results', default=1)
+    parser.add_argument('-c', '--caption', help='caption', action='store_true')
+
+    args = parser.parse_args()
+
     keys = get_config()
 
     openai.organization = keys["openai"]["organization_id"]
@@ -19,7 +26,7 @@ if __name__ == "__main__":
     YOUTUBE_API_VERSION="v3"
     youtube = build(YOUTUBE_API_SERVICE_NAME,YOUTUBE_API_VERSION,developerKey=DEVELOPER_KEY)
 
-    search_response = youtube_search(youtube, q="이차전지", maxResults=1)
+    search_response = youtube_search(youtube, q=args.query, maxResults=args.max_results)
     
     os.makedirs(os.path.join(os.getcwd(), 'Downloads'), exist_ok=True)
 
@@ -27,11 +34,16 @@ if __name__ == "__main__":
         video_url = 'http://www.youtube.com/watch?v=' + item['id']['videoId']
         filename = item['id']['videoId']
 
-        file_downloads(video_url, filename)
-        audio_filename = extract_audio(filename)
+        if args.caption:
+            srt = get_caption(video_url, filename)
+            converted_files = "".join([x['text'] for x in srt])
+            print(converted_files)
+        else:
+            file_downloads(video_url, filename)
+            audio_filename = extract_audio(filename)
 
-        converted_files = audio_segment(filename)
-        remove_files(filename)
+            converted_files = audio_segment(filename)
+            remove_files(filename)
 
         item['summary'] = []
 
