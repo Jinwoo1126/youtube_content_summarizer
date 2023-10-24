@@ -2,11 +2,12 @@ import os
 import gc
 from typing import Any
 from pytube import YouTube
+from youtube_transcript_api import YouTubeTranscriptApi
 from moviepy.editor import *
 
 from .utils import get_rfc_date
 
-def youtube_search(youtube, q:str=None, maxResults:int=None) -> Any:
+def query_search(youtube, q:str=None, maxResults:int=None) -> Any:
     search_response = youtube.search().list(
         q = q,
         order = "viewCount",
@@ -16,6 +17,26 @@ def youtube_search(youtube, q:str=None, maxResults:int=None) -> Any:
         ).execute()
     
     return search_response
+
+
+def channel_search(youtube, channel_id:str=None) -> Any:
+    search_response = youtube.search().list(
+        channelId = channel_id,
+        order = "viewCount",
+        publishedAfter = get_rfc_date(),
+        part = "snippet"
+        ).execute()
+    
+    return search_response
+
+
+def get_caption(url:str, filename:str):    
+    # assigning srt variable with the list 
+    # of dictionaries obtained by the get_transcript() function
+    srt = YouTubeTranscriptApi.get_transcript(filename, languages=['ko'])
+    
+    # return the result
+    return srt
 
 
 def file_downloads(url:str, filename:str):

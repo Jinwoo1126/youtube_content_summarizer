@@ -5,7 +5,7 @@ from oauth2client.tools import argparser
 import openai
 
 from src.utils import get_config, dump_file, remove_files, audio_segment
-from src.youtube_fn import youtube_search, file_downloads, extract_audio
+from src.youtube_fn import query_search, channel_search, file_downloads, extract_audio, get_caption
 
 
 if __name__ == "__main__":
@@ -17,10 +17,14 @@ if __name__ == "__main__":
     DEVELOPER_KEY = keys["youtube_api"]["key"] 
     YOUTUBE_API_SERVICE_NAME="youtube"
     YOUTUBE_API_VERSION="v3"
-    youtube = build(YOUTUBE_API_SERVICE_NAME,YOUTUBE_API_VERSION,developerKey=DEVELOPER_KEY)
+    youtube = build(YOUTUBE_API_SERVICE_NAME,YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
 
-    search_response = youtube_search(youtube, q="이차전지", maxResults=1)
-    
+    #search_response = query_search(youtube, q="이차전지", maxResults=1)
+    search_response = channel_search(youtube, channel_id="UChlv4GSd7OQl3js-jkLOnFA")
+
+    print(search_response)
+    breakpoint()
+
     os.makedirs(os.path.join(os.getcwd(), 'Downloads'), exist_ok=True)
 
     for item in search_response['items']:

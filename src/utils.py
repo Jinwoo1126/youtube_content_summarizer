@@ -38,8 +38,8 @@ def remove_files(filename):
 
 def audio_segment(filename):
     if platform.system() == 'Windows':
-        AudioSegment.converter = r'please enter ffmpeg.exe path'
-        AudioSegment.ffprobe = r'please enter ffprobe.exe path'
+        AudioSegment.converter = r'D:\Works\proj\youtube_content_summarizer\ffmpeg-2023-10-18-git-e7a6bba51a-full_build\bin\ffmpeg.exe'
+        AudioSegment.ffprobe = r'D:\Works\proj\youtube_content_summarizer\ffmpeg-2023-10-18-git-e7a6bba51a-full_build\bin\ffprobe.exe'
 
     song = AudioSegment.from_mp3(os.path.join("Downloads", f"{filename}.mp3"))
 
